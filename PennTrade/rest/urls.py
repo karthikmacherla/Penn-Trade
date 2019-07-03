@@ -5,5 +5,7 @@ urlpatterns = [
     path('product/', ProductList.as_view(), name="product_list"),
     path('product/<int:pk>', ProductDetail.as_view(), name="product_detail"),
     path('user/', UserCreate.as_view(), name="user_create"),
-    path('login/', Login.as_view(), name="login_view")
+    path('user/<username>', UserDetail.as_view(), name = "user_detail"),
+    path('user/products/', UserProducts.as_view(), name="user_products"),
+    path('login/', Login.as_view(), name="login_view"),
 ]

@@ -8,10 +8,12 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
+# Figure out OAuth / Third Party Authentication Scheme
+# Add profile picture to model 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
+        fields = ('username', 'first_name', 'last_name', 'email', 'password')
         extra_kwargs = {'password':{'write_only': True}}
 
     def create(self, validated_data):
