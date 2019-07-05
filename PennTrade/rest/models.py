@@ -16,7 +16,7 @@ class Product(models.Model):
 class Message(models.Model):
     message_subject = models.CharField(max_length=100, blank=True, default="New Message")
     message_body = models.TextField(default="Insert message Here")
-    message_owner = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender", default=None)
+    reciever = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reciever", default=None)
     def __str__(self):
         return self.message_subject

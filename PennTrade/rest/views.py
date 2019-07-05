@@ -7,37 +7,37 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 
-from .serializers import ProductSerializer, UserSerializer
-from .models import Product
+from .serializers import ProductSerializer, UserSerializer, MessageSerializer
+from .models import Product, Message
 
 
-# Create your views here.
+# Allows anyone to see the available list of products
 class ProductList(generics.ListAPIView):
     permission_classes = ()
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    
+
+# Allows anyone to get the data pertaining to one
+# product
 class ProductDetail(generics.RetrieveAPIView):
     permission_classes = ()
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-# Only the user who created a product can update/destroy that product
-
-
-# Only the user who's account this is can update their own details
-
+# Allows user to create a product in their name
 class UserProducts(generics.ListCreateAPIView):
     def get_queryset(self):
         return Product.objects.filter(owner=self.request.user)
     serializer_class = ProductSerializer
 
+# Allows for creation of a new user/listing users
 class UserCreate(generics.ListCreateAPIView):
     authentication_classes = ()
     permission_classes = ()
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+# Allow you to login 
 class Login(APIView):
     permission_classes = ()
 
@@ -50,13 +50,14 @@ class Login(APIView):
         else:
             return Response({"error": "Wrong credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
+# Allows anyone to get details on a user
 class UserDetail(generics.RetrieveAPIView):
     permission_classes = ()
     serializer_class = UserSerializer
     queryset = User.objects.all()
     lookup_field = 'username'
 
-## Simulate Buying a product
+# Allows user to 'buy' a product from another user
 class BuyProduct(APIView):
     def post(self, request):
         product = Product.objects.get(pk=request.data.get('pk'))
@@ -67,7 +68,9 @@ class BuyProduct(APIView):
         product.status = 'SOLD'
         # Send message to owner somehow
         # INCOMPLETE
-class SendMessage(APIView):
-    def post(self, request):
-        pass
 
+# Allows user to send message to another user
+class SendMessage(generics.ListCreateAPIView):
+    permission_classes = ()
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
