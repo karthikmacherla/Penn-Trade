@@ -59,4 +59,15 @@ class UserDetail(generics.RetrieveAPIView):
 ## Simulate Buying a product
 class BuyProduct(APIView):
     def post(self, request):
-        product = Product.objects.filter(pk=request.data.get('pk'))
+        product = Product.objects.get(pk=request.data.get('pk'))
+        if product.status != 'AVAILABLE':
+            return Response({"message": "Sorry, cannot buy an unavailable product."}, 
+            status=status.HTTP_400_BAD_REQUEST)
+        # show that you can make the purchase somehow
+        product.status = 'SOLD'
+        # Send message to owner somehow
+        # INCOMPLETE
+class SendMessage(APIView):
+    def post(self, request):
+        pass
+
