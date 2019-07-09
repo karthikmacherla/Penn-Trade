@@ -3,12 +3,6 @@ from .models import Product, Message
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
-class ProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = '__all__'
-        depth = 1
-
 # Figure out OAuth / Third Party Authentication Scheme
 # Add profile picture to model 
 class UserSerializer(serializers.ModelSerializer):
@@ -28,6 +22,16 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         Token.objects.create(user = user)
         return user
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    status = serializers.PrimaryKeyRelatedField(queryset=Product.STATUS_CHOICES)
+    owner = UserSerializer()
+    class Meta:
+        model = Product
+        fields = ('name', 'description', 'price', 'owner')
+        depth = 1
+
 
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
