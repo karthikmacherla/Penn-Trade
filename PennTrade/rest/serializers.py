@@ -8,8 +8,8 @@ from rest_framework.authtoken.models import Token
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password')
-        extra_kwargs = {'password':{'write_only': True}}
+        fields = ('username', 'first_name', 'last_name', 'email', 'password', 'id')
+        extra_kwargs = {'password':{'write_only': True}, 'id': {'read_only': True}}
 
     def create(self, validated_data):
         user = User(
@@ -25,15 +25,15 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    status = serializers.PrimaryKeyRelatedField(queryset=Product.STATUS_CHOICES)
-    owner = UserSerializer()
+    # status = serializers.PrimaryKeyRelatedField(queryset=Product.STATUS_CHOICES)
+    owner = UserSerializer(read_only=True)
     class Meta:
         model = Product
         fields = ('name', 'description', 'price', 'owner')
         depth = 1
 
-
 class MessageSerializer(serializers.ModelSerializer):
+    sender = UserSerializer(read_only=True)
     class Meta:
         model = Message
-        fields = '__all__'
+        fields = ('message_subject', 'message_body', 'sender', 'reciever')

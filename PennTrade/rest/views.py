@@ -26,9 +26,13 @@ class ProductDetail(generics.RetrieveAPIView):
 
 # Allows user to create a product in their name
 class UserProducts(generics.ListCreateAPIView):
+    serializer_class = ProductSerializer
+
     def get_queryset(self):
         return Product.objects.filter(owner=self.request.user)
-    serializer_class = ProductSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 # Allows for creation of a new user/listing users
 class UserCreate(generics.ListCreateAPIView):
@@ -70,7 +74,7 @@ class BuyProduct(APIView):
         # INCOMPLETE
 
 # Allows user to send message to another user
-class SendMessage(generics.ListCreateAPIView):
+class Messages(generics.ListCreateAPIView):
     permission_classes = ()
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
