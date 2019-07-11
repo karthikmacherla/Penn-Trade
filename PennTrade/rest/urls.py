@@ -7,6 +7,6 @@ urlpatterns = [
     path('user/', UserCreate.as_view(), name="user_create"),
     path('user/products/', UserProducts.as_view(), name="user_products"),
     path('user/detail/<username>', UserDetail.as_view(), name = "user_detail"),
-    path('user/messages/', Messages.as_view(), name="send_message"),
+    path('user/message/', Messages.as_view(), name="send_message"),
     path('login/', Login.as_view(), name="login_view"),
 ]

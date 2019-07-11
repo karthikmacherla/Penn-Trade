@@ -37,3 +37,6 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = ('message_subject', 'message_body', 'sender', 'reciever')
+
+class MessageReadSerializer(MessageSerializer):
+    reciever = UserSerializer(read_only=True)

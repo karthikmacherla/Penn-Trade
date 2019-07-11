@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 
-from .serializers import ProductSerializer, UserSerializer, MessageSerializer
+from .serializers import *
 from .models import Product, Message
 
 
@@ -17,8 +17,7 @@ class ProductList(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-# Allows anyone to get the data pertaining to one
-# product
+# Allows anyone to get the data pertaining to one product
 class ProductDetail(generics.RetrieveAPIView):
     permission_classes = ()
     queryset = Product.objects.all()
@@ -75,6 +74,12 @@ class BuyProduct(APIView):
 
 # Allows user to send message to another user
 class Messages(generics.ListCreateAPIView):
-    permission_classes = ()
     queryset = Message.objects.all()
-    serializer_class = MessageSerializer
+
+    def get_serializer_class(self):
+        if self.request.method in ['GET']:
+            return MessageReadSerializer
+        return MessageSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)
