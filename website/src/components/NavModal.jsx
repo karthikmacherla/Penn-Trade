@@ -5,6 +5,7 @@ import { Modal, Navbar } from 'react-bulma-components/full'
 class NavModal extends React.Component {
     static propTypes = {
         modal: PropTypes.object,
+        name: PropTypes.string,
         children: PropTypes.node.isRequired,
     };
 
@@ -22,7 +23,7 @@ class NavModal extends React.Component {
     render() {
         return (
             <>
-            <Navbar.Item href="#" onClick={this.open}>Login</Navbar.Item>
+            <Navbar.Item href="#" onClick={this.open}>{this.props.name}</Navbar.Item>
             <Modal show={this.state.show} onClose={this.close} {...this.props.modal}>
                 {this.props.children}
             </Modal>
